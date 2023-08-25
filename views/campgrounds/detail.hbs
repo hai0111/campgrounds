@@ -1,0 +1,86 @@
+<div class='row'>
+	<div class='col-6'>
+		{{message}}
+		<div class='card'>
+			<img src='{{camp.image}}' class='card-img-top'
+				alt='{{camp.location}}'
+				style='object-fit:  cover; max-height: calc(100vh - 500px);' />
+			<div class='card-body'>
+				<h5 class='card-title'>
+					{{camp.title}}
+				</h5>
+				<p class='card-text'>{{camp.description}}</p>
+			</div>
+
+			<ul class='list-group list-group-flush'>
+				<li class='list-group-item text-muted'>{{camp.location}}</li>
+				<li class='list-group-item'>${{camp.price}}/night</li>
+			</ul>
+
+			<div class='card-body'>
+				<form class='mb-0'
+					action='/campgrounds/{{camp.id}}?_method=delete'
+					method='post'>
+					<a href='/campgrounds' class='btn btn-info'>
+						Back to Campgrounds
+					</a>
+					<a href='/campgrounds/{{camp.id}}/update'
+						class='btn btn-primary'>
+						Update
+					</a>
+					<button class='btn btn-danger'>
+						Delete
+					</button>
+				</form>
+			</div>
+
+			<div class='card-footer'>
+				<small>
+					2 days ago
+				</small>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-6">
+		<h2 class="mb-3">Leave a review</h2>
+		<form method="post" action="/campgrounds/{{camp.id}}/reviews"
+			class="validation-form mb-4" novalidate>
+			<div class="mt-1">
+				<label for="rating" class="form-label">Rating</label>
+				<input type="range" name="rating" class="form-range" id="rating"
+					min="0" max="5" step="1">
+			</div>
+			<div class="mt-1">
+				<label for="body" class="form-label">Review</label>
+				<textarea class="form-control" name="body" id="body" rows="3"
+					required></textarea>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+				<div class="invalid-feedback">
+					This field is required!
+				</div>
+			</div>
+
+			<button type="submit" class="btn btn-success mt-3">Submit</button>
+		</form>
+
+		{{#each camp.reviews}}
+		<div class="card mb-2">
+			<div class="card-body">
+				<h5 class="card-title">Rating: {{rating}}
+				</h5>
+				<p class="card-text">Review: {{body}}
+				</p>
+
+				<form
+					action="/campgrounds/{{../camp.id}}/reviews/{{id}}?_method=delete"
+					method="POST">
+					<button class="btn btn-sm btn-danger">Delete</button>
+				</form>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+</div>
