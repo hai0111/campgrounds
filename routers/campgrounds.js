@@ -47,6 +47,17 @@ campgroundRouter.get(
 )
 
 campgroundRouter.get(
+	'/:id',
+	catchAsync(async (req, res) => {
+		const { id } = req.params
+		const camp = await CampGround.findById(id)
+		if (!camp) throw new ExpressError(404, 'Campground not found')
+
+		res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
+	})
+)
+
+campgroundRouter.get(
 	'/:id/update',
 	catchAsync(async (req, res) => {
 		const { id } = req.params
@@ -59,17 +70,6 @@ campgroundRouter.get(
 	})
 )
 
-campgroundRouter.get(
-	'/:id',
-	catchAsync(async (req, res) => {
-		const { id } = req.params
-		const camp = await CampGround.findById(id).populate('reviews')
-		if (!camp) throw new ExpressError(404, 'Campground not found')
-
-		res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
-	})
-)
-
 campgroundRouter.put(
 	'/:id',
 	validateCampground,
@@ -77,6 +77,10 @@ campgroundRouter.put(
 		const { id } = req.params
 		const camp = await CampGround.findByIdAndUpdate(id, req.body)
 		await camp.save()
+		req.flash('message', {
+			type: 'success',
+			text: 'Update completed successfully',
+		})
 		res.redirect(`/campgrounds/${id}`)
 	})
 )
@@ -86,6 +90,10 @@ campgroundRouter.delete(
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		await CampGround.findByIdAndDelete(id)
+		req.flash('message', {
+			type: 'success',
+			text: 'Delete completed successfully',
+		})
 		res.redirect('/campgrounds')
 	})
 )
@@ -97,7 +105,13 @@ campgroundRouter.post(
 		const { body } = req
 		const c = new CampGround(body)
 		await c.save()
-		res.redirect(`/camgrounds/${c.id}`)
+
+		req.flash('message', {
+			type: 'success',
+			text: 'Create completed successfully',
+		})
+
+		res.redirect(`/campgrounds/${c._id}`)
 	})
 )
 

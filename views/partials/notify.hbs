@@ -1,0 +1,20 @@
+{{#if message}}
+{{#with message}}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast border-0 show bg-{{type}}-subtle"
+        role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-{{type}}-subtle"
+            style="border-radius: 5px !important;">
+            <div class="bg-{{type}} me-2"
+                style="width: 20px; height: 20px; border-radius: 5px;">
+            </div>
+            <strong class="me-auto">
+                {{text}}
+            </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+{{/with}}
+{{/if}}
