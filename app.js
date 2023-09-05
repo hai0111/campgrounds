@@ -60,11 +60,13 @@ const sessionOptions = {
 }
 app.use(session(sessionOptions))
 app.use(flash())
-passport.use(new LocalStrategy(User.authenticate))
+
+passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.serializeUser(User.deserializeUser())
 
 app.use(passport.initialize())
+app.use(passport.session())
 
 app.use((req, res, next) => {
 	res.locals.toast = req.flash('toast')[0]
