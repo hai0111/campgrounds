@@ -14,6 +14,7 @@ const ExpressError = require('./utils/ExpressError')
 const { engine } = require('express-handlebars')
 
 const campgroundRouter = require('./routers/campgrounds')
+const authRouter = require('./routers/auth')
 
 mongoose
 	.connect('mongodb://localhost:27017/yelp-camp')
@@ -87,6 +88,7 @@ app.get('/fakeUser', async (req, res) => {
 	res.send(newUser)
 })
 
+app.use('/', authRouter)
 app.use('/campgrounds', campgroundRouter)
 
 app.use('*', (req, res, next) => {
@@ -95,8 +97,6 @@ app.use('*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
 	const { code = 500, message = 'Something went wrong', stack, errToast } = err
-	console.log(req.path)
-	console.log(err)
 	if (errToast)
 		req.flash('message', {
 			type: 'danger',

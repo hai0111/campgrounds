@@ -25,3 +25,11 @@ module.exports.reviewSchema = Joi.object({
 })
 	.required()
 	.unknown()
+
+module.exports.userSchema = Joi.object({
+	username: Joi.string().required(),
+	email: Joi.string().required().email(),
+	password: Joi.string().required(),
+})
+	.required()
+	.unknown()
