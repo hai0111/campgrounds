@@ -5,6 +5,9 @@ const methodOverride = require('method-override')
 const session = require('express-session')
 const flash = require('connect-flash')
 const mongoose = require('mongoose')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
 
 const ExpressError = require('./utils/ExpressError')
 
@@ -56,6 +59,11 @@ const sessionOptions = {
 }
 app.use(session(sessionOptions))
 app.use(flash())
+passport.use(new LocalStrategy(User.authenticate))
+passport.serializeUser(User.serializeUser())
+passport.serializeUser(User.deserializeUser())
+
+app.use(passport.initialize())
 
 app.use((req, res, next) => {
 	res.locals.message = req.flash('message')[0]
@@ -66,6 +74,17 @@ app.use(express.static(path.join(__dirname, '/public')))
 
 app.get('/', (req, res) => {
 	res.render('home')
+})
+
+app.get('/fakeUser', async (req, res) => {
+	const user = new User({
+		email: 'nguyenhai01101@gmail.com',
+		username: 'nvhai',
+	})
+
+	const newUser = await User.register(user, 'nvhai')
+
+	res.send(newUser)
 })
 
 app.use('/campgrounds', campgroundRouter)
