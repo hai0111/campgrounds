@@ -67,7 +67,7 @@ passport.serializeUser(User.deserializeUser())
 app.use(passport.initialize())
 
 app.use((req, res, next) => {
-	res.locals.message = req.flash('message')[0]
+	res.locals.toast = req.flash('toast')[0]
 	next()
 })
 
@@ -98,10 +98,11 @@ app.use('*', (req, res, next) => {
 app.use((err, req, res, next) => {
 	const { code = 500, message = 'Something went wrong', stack, errToast } = err
 	if (errToast)
-		req.flash('message', {
+		req.flash('toast', {
 			type: 'danger',
-			text: `${code}: ${message}`,
+			message: `${code}: ${message}`,
 		})
+	else res.locals.toast = undefined
 	res.render('error', { code, message, stack, nav: true })
 })
 

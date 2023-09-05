@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync')
 const User = require('../models/user')
 const { userSchema } = require('../schemas')
 const authRouter = express.Router()
+const ExpressError = require('../utils/ExpressError')
 
 authRouter.get('/register', (req, res) => {
 	res.render('auth/register', {
@@ -31,9 +32,14 @@ authRouter.post(
 			email,
 		})
 
-		const newUser = await User.register(user, password)
+		await User.register(user, password)
 
-		res.send(newUser)
+		req.flash('toast', {
+			message: 'Registered successfully',
+			type: 'success',
+		})
+
+		res.redirect('/campgrounds')
 	})
 )
 
