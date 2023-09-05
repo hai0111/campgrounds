@@ -1,15 +1,10 @@
 const express = require('express')
 const catchAsync = require('../utils/catchAsync')
+const passport = require('passport')
 const User = require('../models/user')
 const { userSchema } = require('../schemas')
 const authRouter = express.Router()
 const ExpressError = require('../utils/ExpressError')
-
-authRouter.get('/register', (req, res) => {
-	res.render('auth/register', {
-		nav: true,
-	})
-})
 
 const validateUser = (req, res, next) => {
 	const { body } = req
@@ -21,6 +16,12 @@ const validateUser = (req, res, next) => {
 		)
 	} else next()
 }
+
+authRouter.get('/register', (req, res) => {
+	res.render('auth/register', {
+		nav: true,
+	})
+})
 
 authRouter.post(
 	'/register',
@@ -39,8 +40,32 @@ authRouter.post(
 			type: 'success',
 		})
 
-		res.redirect('/campgrounds')
+		res.redirect('/login')
 	})
 )
+
+authRouter.get('/login', (req, res) => {
+	res.render('auth/login', {
+		nav: true,
+	})
+})
+
+authRouter.post('/login', (req, res, next) => {
+	passport.authenticate('local', (none, user) => {
+		if (user) {
+			req.flash('toast', {
+				message: 'Signed in successfully',
+				type: 'success',
+			})
+			res.redirect('/campgrounds')
+		} else {
+			req.flash('toast', {
+				message: 'Account or password is incorrect',
+				type: 'danger',
+			})
+			res.redirect('/login')
+		}
+	})(req, res, next)
+})
 
 module.exports = authRouter
