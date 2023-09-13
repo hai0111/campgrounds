@@ -50,22 +50,32 @@ authRouter.get('/login', (req, res) => {
 	})
 })
 
-authRouter.post('/login', (req, res, next) => {
-	passport.authenticate('local', (none, user) => {
-		if (user) {
-			req.flash('toast', {
-				message: 'Signed in successfully',
-				type: 'success',
-			})
-			res.redirect('/campgrounds')
-		} else {
-			req.flash('toast', {
-				message: 'Account or password is incorrect',
-				type: 'danger',
-			})
-			res.redirect('/login')
+authRouter.post(
+	'/login',
+	passport.authenticate('local', {
+		failureRedirect: '/login',
+		failureFlash: true,
+	}),
+	(req, res) => {
+		req.flash('toast', {
+			message: 'Welcome to campgrounds!',
+			type: 'success',
+		})
+		res.redirect('/campgrounds')
+	}
+)
+
+authRouter.get('/logout', (req, res, next) => {
+	req.logout((err) => {
+		if (err) {
+			return next(err)
 		}
-	})(req, res, next)
+		req.flash('toast', {
+			message: 'See you again',
+			type: 'success',
+		})
+		res.redirect('/campgrounds')
+	})
 })
 
 module.exports = authRouter

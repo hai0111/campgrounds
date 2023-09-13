@@ -9,6 +9,7 @@ const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
 const { camgroundSchema } = require('../schemas')
 const reviewRouter = require('./reviews')
+const { authenticate } = require('../middleware')
 
 const validateCampground = (req, res, next) => {
 	const { body } = req
@@ -39,6 +40,7 @@ campgroundRouter.get(
 
 campgroundRouter.get(
 	'/new',
+	authenticate,
 	catchAsync(async (req, res) => {
 		res.render('campgrounds/new', {
 			nav: true,
@@ -59,6 +61,7 @@ campgroundRouter.get(
 
 campgroundRouter.get(
 	'/:id/update',
+	authenticate,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		const camp = await CampGround.findById(id)
@@ -72,6 +75,7 @@ campgroundRouter.get(
 
 campgroundRouter.put(
 	'/:id',
+	authenticate,
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
@@ -87,6 +91,7 @@ campgroundRouter.put(
 
 campgroundRouter.delete(
 	'/:id',
+	authenticate,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		await CampGround.findByIdAndDelete(id)
@@ -100,6 +105,7 @@ campgroundRouter.delete(
 
 campgroundRouter.post(
 	'/',
+	authenticate,
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { body } = req
