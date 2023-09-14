@@ -8,7 +8,8 @@
 				<h5 class='card-title'>
 					{{camp.title}}
 				</h5>
-				<p class='card-text'>{{camp.description}}</p>
+				<small>Author by: {{camp.author.username}}</small>
+				<p class='card-text mt-2'>{{camp.description}}</p>
 			</div>
 
 			<ul class='list-group list-group-flush'>
@@ -23,6 +24,7 @@
 					<a href='/campgrounds' class='btn btn-info'>
 						Back to Campgrounds
 					</a>
+					{{#if camp}}
 					<a href='/campgrounds/{{camp.id}}/update'
 						class='btn btn-primary'>
 						Update
@@ -30,6 +32,7 @@
 					<button class='btn btn-danger'>
 						Delete
 					</button>
+					{{/if}}
 				</form>
 			</div>
 

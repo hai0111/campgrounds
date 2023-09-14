@@ -22,6 +22,15 @@ const validateCampground = (req, res, next) => {
 	} else next()
 }
 
+const authorization = async (req, res, next) => {
+	const { id } = req.params
+	const camp = await CampGround.findById(id)
+	if (!camp.author.equals(req.user?.id)) {
+		return res.redirect(`/campgrounds/${id}`)
+	}
+	next()
+}
+
 const campgroundRouter = express.Router()
 
 campgroundRouter.use('/:id/reviews', reviewRouter)
@@ -54,8 +63,10 @@ campgroundRouter.get(
 		const { id } = req.params
 		if (!id) return
 		const camp = await CampGround.findById(id).populate('reviews')
+
 		if (!camp) throw new ExpressError(404, 'Campground not found')
 
+		res.locals.isAuthor = req.user && camp.author?.id === req.user?.id
 		res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
 	})
 )
@@ -63,6 +74,7 @@ campgroundRouter.get(
 campgroundRouter.get(
 	'/:id/update',
 	authenticate,
+	authorization,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		const camp = await CampGround.findById(id)
@@ -77,11 +89,13 @@ campgroundRouter.get(
 campgroundRouter.put(
 	'/:id',
 	authenticate,
+	authorization,
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
-		const camp = await CampGround.findByIdAndUpdate(id, req.body)
-		await camp.save()
+
+		await CampGround.findByIdAndUpdate(id, req.body).then((camp) => camp.save())
+
 		req.flash('message', {
 			type: 'success',
 			text: 'Update completed successfully',
@@ -93,9 +107,12 @@ campgroundRouter.put(
 campgroundRouter.delete(
 	'/:id',
 	authenticate,
+	authorization,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
+
 		await CampGround.findByIdAndDelete(id)
+
 		req.flash('message', {
 			type: 'success',
 			text: 'Delete completed successfully',
@@ -110,9 +127,8 @@ campgroundRouter.post(
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { body } = req
-		const c = new CampGround(body)
+		const c = new CampGround({ ...body, author: req.user._id })
 		await c.save()
-
 		req.flash('message', {
 			type: 'success',
 			text: 'Create completed successfully',

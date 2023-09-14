@@ -15,6 +15,14 @@ const CampGroundSchema = new Schema({
 			ref: 'Review',
 		},
 	],
+	author: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+	},
+})
+
+CampGroundSchema.post('findOne', async (camp) => {
+	if (camp) await camp.populate('author')
 })
 
 CampGroundSchema.post('findOneAndDelete', async (doc) => {

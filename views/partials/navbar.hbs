@@ -15,7 +15,13 @@
 				<a class='nav-link' href='/campgrounds'>Campgrounds</a>
 				<a class='nav-link' href='/campgrounds/new'>New Campground</a>
 				<div class="flex-grow-1"></div>
-				{{#if isLogined}}
+				{{#if user}}
+				<span class="nav-link">
+					Welcome
+					<span class="text-capitalize">
+						{{user.username}}
+					</span>
+				</span>
 				<a class='nav-link' href='/logout'>Logout</a>
 				{{else}}
 				<a class='nav-link' href='/login'>Login</a>

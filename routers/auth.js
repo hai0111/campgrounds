@@ -32,15 +32,26 @@ authRouter.post(
 			username,
 			email,
 		})
-
 		await User.register(user, password)
 
-		req.flash('toast', {
-			message: 'Registered successfully',
-			type: 'success',
-		})
+		req.login(user, (err) => {
+			if (!err) {
+				req.flash('toast', {
+					message: 'Welcome to campgrounds!',
+					type: 'success',
+				})
+				const { returnTo = '/campgrounds' } = req.session
+				delete req.session.returnTo
+				return res.redirect(returnTo)
+			}
 
-		res.redirect('/login')
+			req.flash('toast', {
+				message: 'Registered successfully',
+				type: 'success',
+			})
+
+			res.redirect('/login')
+		})
 	})
 )
 
@@ -61,7 +72,9 @@ authRouter.post(
 			message: 'Welcome to campgrounds!',
 			type: 'success',
 		})
-		res.redirect('/campgrounds')
+		const { returnTo = '/campgrounds' } = res.locals
+		delete req.session.returnTo
+		return res.redirect(returnTo)
 	}
 )
 
@@ -74,7 +87,8 @@ authRouter.get('/logout', (req, res, next) => {
 			message: 'See you again',
 			type: 'success',
 		})
-		res.redirect('/campgrounds')
+
+		return res.redirect('/login')
 	})
 })
 
