@@ -70,6 +70,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use((req, res, next) => {
+	res.locals.isLogined = req.isAuthenticated()
 	res.locals.toast = req.flash('toast')[0]
 	next()
 })

@@ -53,7 +53,7 @@ authRouter.get('/login', (req, res) => {
 authRouter.post(
 	'/login',
 	passport.authenticate('local', {
-		failureRedirect: '/login',
+		failureRedirenect: '/login',
 		failureFlash: true,
 	}),
 	(req, res) => {

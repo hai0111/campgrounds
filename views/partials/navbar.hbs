@@ -1,23 +1,29 @@
-<nav class='navbar navbar-expand-lg bg-body-tertiary' data-bs-theme='dark'>
+<nav class='navbar navbar-expand-lg bg-body-tertiary justify-content-between'
+	data-bs-theme='dark'>
 	<div class='container-fluid'>
 		<a class='navbar-brand' href='#'>YelpCamp</a>
-		<button
-			class='navbar-toggler'
-			type='button'
-			data-bs-toggle='collapse'
+		<button class='navbar-toggler' type='button' data-bs-toggle='collapse'
 			data-bs-target='#navbarNavAltMarkup'
-			aria-controls='navbarNavAltMarkup'
-			aria-expanded='false'
-			aria-label='Toggle navigation'
-		>
+			aria-controls='navbarNavAltMarkup' aria-expanded='false'
+			aria-label='Toggle navigation'>
 			<span class='navbar-toggler-icon'></span>
 		</button>
+
 		<div class='collapse navbar-collapse' id='navbarNavAltMarkup'>
-			<div class='navbar-nav'>
+			<div class='navbar-nav flex-grow-1'>
 				<a class='nav-link' href='/'>Home</a>
 				<a class='nav-link' href='/campgrounds'>Campgrounds</a>
 				<a class='nav-link' href='/campgrounds/new'>New Campground</a>
+				<div class="flex-grow-1"></div>
+				{{#if isLogined}}
+				<a class='nav-link' href='/logout'>Logout</a>
+				{{else}}
+				<a class='nav-link' href='/login'>Login</a>
+				<a class='nav-link' href='/register'>Register</a>
+				{{/if}}
+
 			</div>
 		</div>
+
 	</div>
 </nav>

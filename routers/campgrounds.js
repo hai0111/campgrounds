@@ -52,7 +52,8 @@ campgroundRouter.get(
 	'/:id',
 	catchAsync(async (req, res) => {
 		const { id } = req.params
-		const camp = await CampGround.findById(id)
+		if (!id) return
+		const camp = await CampGround.findById(id).populate('reviews')
 		if (!camp) throw new ExpressError(404, 'Campground not found')
 
 		res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
