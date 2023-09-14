@@ -7,29 +7,8 @@ const ExpressError = require('../utils/ExpressError')
 
 const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
-const { camgroundSchema } = require('../schemas')
 const reviewRouter = require('./reviews')
-const { authenticate } = require('../middleware')
-
-const validateCampground = (req, res, next) => {
-	const { body } = req
-	const resultValidate = camgroundSchema.validate(body, { abortEarly: false })
-	if (resultValidate.error) {
-		throw new ExpressError(
-			400,
-			resultValidate.error.details.map((item) => item.message).join()
-		)
-	} else next()
-}
-
-const authorization = async (req, res, next) => {
-	const { id } = req.params
-	const camp = await CampGround.findById(id)
-	if (!camp.author.equals(req.user?.id)) {
-		return res.redirect(`/campgrounds/${id}`)
-	}
-	next()
-}
+const { authenticate, isAuthor, validateCampground } = require('../middleware')
 
 const campgroundRouter = express.Router()
 
@@ -74,7 +53,7 @@ campgroundRouter.get(
 campgroundRouter.get(
 	'/:id/update',
 	authenticate,
-	authorization,
+	isAuthor,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		const camp = await CampGround.findById(id)
@@ -89,7 +68,7 @@ campgroundRouter.get(
 campgroundRouter.put(
 	'/:id',
 	authenticate,
-	authorization,
+	isAuthor,
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
@@ -107,7 +86,7 @@ campgroundRouter.put(
 campgroundRouter.delete(
 	'/:id',
 	authenticate,
-	authorization,
+	isAuthor,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 

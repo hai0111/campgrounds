@@ -2,20 +2,8 @@ const express = require('express')
 const catchAsync = require('../utils/catchAsync')
 const passport = require('passport')
 const User = require('../models/user')
-const { userSchema } = require('../schemas')
+const { validateUser } = require('../middleware')
 const authRouter = express.Router()
-const ExpressError = require('../utils/ExpressError')
-
-const validateUser = (req, res, next) => {
-	const { body } = req
-	const resultValidate = userSchema.validate(body, { abortEarly: false })
-	if (resultValidate.error) {
-		throw new ExpressError(
-			400,
-			resultValidate.error.details.map((item) => item.message).join()
-		)
-	} else next()
-}
 
 authRouter.get('/register', (req, res) => {
 	res.render('auth/register', {
@@ -56,6 +44,8 @@ authRouter.post(
 )
 
 authRouter.get('/login', (req, res) => {
+	if (req.user) return res.redirect('/campgrounds')
+
 	res.render('auth/login', {
 		nav: true,
 	})
