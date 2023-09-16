@@ -2,9 +2,14 @@ const ExpressError = require('./utils/ExpressError')
 const { camgroundSchema, userSchema, reviewSchema } = require('./schemas')
 const Campground = require('./models/campground')
 
+module.exports.saveReturnTo = (path) => (req, res, next) => {
+	req.session.returnTo = typeof path === 'string' ? path : path(req)
+	next()
+}
+
 module.exports.authenticate = (req, res, next) => {
 	if (!req.isAuthenticated() && req.path !== '/login') {
-		req.session.returnTo = req.method === 'GET' ? req.originalUrl : undefined
+		req.session.returnTo = req.session.returnTo || req.originalUrl
 
 		req.flash('toast', {
 			type: 'danger',

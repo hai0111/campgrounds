@@ -28,7 +28,7 @@ authRouter.post(
 					message: 'Welcome to campgrounds!',
 					type: 'success',
 				})
-				const { returnTo = '/campgrounds' } = req.session
+				const { returnTo = '/campgrounds' } = res.locals
 				delete req.session.returnTo
 				return res.redirect(returnTo)
 			}
@@ -62,6 +62,7 @@ authRouter.post(
 			message: 'Welcome to campgrounds!',
 			type: 'success',
 		})
+
 		const { returnTo = '/campgrounds' } = res.locals
 		delete req.session.returnTo
 		return res.redirect(returnTo)

@@ -1,6 +1,6 @@
 const express = require('express')
 const reviewRouter = express.Router({ mergeParams: true })
-const { validateReview } = require('../middleware')
+const { validateReview, saveReturnTo } = require('../middleware')
 
 const Review = require('../models/review')
 const catchAsync = require('../utils/catchAsync')
@@ -10,6 +10,7 @@ const { authenticate } = require('../middleware')
 
 reviewRouter.post(
 	'/',
+	saveReturnTo((req) => `/campgrounds/${req.params.id}`),
 	authenticate,
 	validateReview,
 	catchAsync(async (req, res) => {
