@@ -29,6 +29,7 @@
 						class='btn btn-primary'>
 						Update
 					</a>
+
 					<button class='btn btn-danger'>
 						Delete
 					</button>
@@ -76,11 +77,14 @@
 				<p class="card-text">Review: {{body}}
 				</p>
 
+
+				{{#if isAuthor}}
 				<form
 					action="/campgrounds/{{../camp.id}}/reviews/{{id}}?_method=delete"
 					method="POST">
 					<button class="btn btn-sm btn-danger">Delete</button>
 				</form>
+				{{/if}}
 			</div>
 		</div>
 		{{/each}}

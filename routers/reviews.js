@@ -1,6 +1,10 @@
 const express = require('express')
 const reviewRouter = express.Router({ mergeParams: true })
-const { validateReview, saveReturnTo } = require('../middleware')
+const {
+	validateReview,
+	saveReturnTo,
+	isAuthorReview,
+} = require('../middleware')
 
 const Review = require('../models/review')
 const catchAsync = require('../utils/catchAsync')
@@ -21,7 +25,7 @@ reviewRouter.post(
 
 		const campground = await CampGround.findById(id)
 		campground.reviews = campground.reviews || []
-		const rv = new Review(body)
+		const rv = new Review({ ...body, author: req.user._id })
 		campground.reviews.push(rv)
 		await rv.save()
 		await campground.save()
@@ -32,6 +36,7 @@ reviewRouter.post(
 reviewRouter.delete(
 	'/:reviewId',
 	authenticate,
+	isAuthorReview,
 	catchAsync(async (req, res) => {
 		const { id, reviewId } = req.params
 

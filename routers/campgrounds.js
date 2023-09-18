@@ -8,7 +8,11 @@ const ExpressError = require('../utils/ExpressError')
 const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
 const reviewRouter = require('./reviews')
-const { authenticate, isAuthor, validateCampground } = require('../middleware')
+const {
+	authenticate,
+	isAuthorCampground,
+	validateCampground,
+} = require('../middleware')
 
 const campgroundRouter = express.Router()
 
@@ -41,7 +45,16 @@ campgroundRouter.get(
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		if (!id) return
-		const camp = await CampGround.findById(id).populate('reviews')
+		const camp = await CampGround.findById(id).populate({
+			path: 'reviews',
+			populate: {
+				path: 'author',
+			},
+		})
+
+		camp?.reviews.forEach((rv) => {
+			rv.isAuthor = req.user?.id && rv.author?.equals(req.user?.id)
+		})
 
 		if (!camp) throw new ExpressError(404, 'Campground not found')
 
@@ -53,7 +66,7 @@ campgroundRouter.get(
 campgroundRouter.get(
 	'/:id/update',
 	authenticate,
-	isAuthor,
+	isAuthorCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 		const camp = await CampGround.findById(id)
@@ -68,7 +81,7 @@ campgroundRouter.get(
 campgroundRouter.put(
 	'/:id',
 	authenticate,
-	isAuthor,
+	isAuthorCampground,
 	validateCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
@@ -86,7 +99,7 @@ campgroundRouter.put(
 campgroundRouter.delete(
 	'/:id',
 	authenticate,
-	isAuthor,
+	isAuthorCampground,
 	catchAsync(async (req, res) => {
 		const { id } = req.params
 

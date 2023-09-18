@@ -1,6 +1,7 @@
 const ExpressError = require('./utils/ExpressError')
 const { camgroundSchema, userSchema, reviewSchema } = require('./schemas')
 const Campground = require('./models/campground')
+const Review = require('./models/review')
 
 module.exports.saveReturnTo = (path) => (req, res, next) => {
 	req.session.returnTo = typeof path === 'string' ? path : path(req)
@@ -42,10 +43,19 @@ module.exports.validateCampground = (req, res, next) => {
 	} else next()
 }
 
-module.exports.isAuthor = async (req, res, next) => {
+module.exports.isAuthorCampground = async (req, res, next) => {
 	const { id } = req.params
 	const camp = await Campground.findById(id)
 	if (!camp.author.equals(req.user?.id)) {
+		return res.redirect(`/campgrounds/${id}`)
+	}
+	next()
+}
+
+module.exports.isAuthorReview = async (req, res, next) => {
+	const { reviewId, id } = req.params
+	const rv = await Review.findById(reviewId)
+	if (!rv.author.equals(req.user?.id)) {
 		return res.redirect(`/campgrounds/${id}`)
 	}
 	next()
