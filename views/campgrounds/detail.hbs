@@ -48,7 +48,7 @@
 	<div class="col-6">
 		<h2 class="mb-3">Leave a review</h2>
 		<form method="post" action="/campgrounds/{{camp.id}}/reviews"
-			class="validation-form mb-4" novalidate>
+			class="{{#if user}}validation-form{{/if}} mb-4" novalidate>
 			<div class="mt-1">
 				<label for="rating" class="form-label">Rating</label>
 				<input type="range" name="rating" class="form-range" id="rating"
