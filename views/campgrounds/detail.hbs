@@ -72,9 +72,13 @@
 		{{#each camp.reviews}}
 		<div class="card mb-2">
 			<div class="card-body">
-				<h5 class="card-title">Rating: {{rating}}
+				<h5 class="card-title mb-0">Rating: {{rating}}
 				</h5>
-				<p class="card-text">Review: {{body}}
+
+				<small class="card-subtitle text-muted">By:
+					{{author.username}}
+				</small>
+				<p class="card-text mt-1"> {{body}}
 				</p>
 
 
