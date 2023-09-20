@@ -52,7 +52,7 @@
 			<div class="mt-1">
 				<label for="rating" class="form-label">Rating</label>
 				<input type="range" name="rating" class="form-range" id="rating"
-					min="0" max="5" step="1">
+					min="1" max="5" step="1">
 			</div>
 			<div class="mt-1">
 				<label for="body" class="form-label">Review</label>
@@ -72,12 +72,12 @@
 		{{#each camp.reviews}}
 		<div class="card mb-2">
 			<div class="card-body">
-				<h5 class="card-title mb-0">Rating: {{rating}}
+				<h5 class="fw-bold">
+					{{author.username}}
 				</h5>
 
-				<small class="card-subtitle text-muted">By:
-					{{author.username}}
-				</small>
+				{{> star this}}
+
 				<p class="card-text mt-1"> {{body}}
 				</p>
 
