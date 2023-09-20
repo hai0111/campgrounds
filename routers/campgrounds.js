@@ -14,13 +14,27 @@ const {
 
 const campgroundRouter = express.Router()
 
-campgroundRouter.use('/:id/reviews', reviewRouter)
-
-campgroundRouter.get('/', catchAsync(campground.index))
+campgroundRouter
+	.route('/')
+	.get(catchAsync(campground.index))
+	.post(authenticate, validateCampground, catchAsync(campground.create))
 
 campgroundRouter.get('/new', authenticate, catchAsync(campground.renderNewForm))
 
-campgroundRouter.get('/:id', catchAsync(campground.detail))
+campgroundRouter.post('/reset', catchAsync(campground.reset))
+
+campgroundRouter
+	.route('/:id')
+	.get(catchAsync(campground.detail))
+	.put(
+		authenticate,
+		isAuthorCampground,
+		validateCampground,
+		catchAsync(campground.update)
+	)
+	.delete(authenticate, isAuthorCampground, catchAsync(campground.delete))
+
+campgroundRouter.use('/:id/reviews', reviewRouter)
 
 campgroundRouter.get(
 	'/:id/update',
@@ -28,29 +42,5 @@ campgroundRouter.get(
 	isAuthorCampground,
 	catchAsync(campground.renderUpdateForm)
 )
-
-campgroundRouter.put(
-	'/:id',
-	authenticate,
-	isAuthorCampground,
-	validateCampground,
-	catchAsync(campground.update)
-)
-
-campgroundRouter.delete(
-	'/:id',
-	authenticate,
-	isAuthorCampground,
-	catchAsync(campground.delete)
-)
-
-campgroundRouter.post(
-	'/',
-	authenticate,
-	validateCampground,
-	catchAsync(campground.create)
-)
-
-campgroundRouter.post('/reset', catchAsync(campground.reset))
 
 module.exports = campgroundRouter
