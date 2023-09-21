@@ -47,14 +47,31 @@
 
 	<div class="col-6">
 		<h2 class="mb-3">Leave a review</h2>
+
 		<form method="post" action="/campgrounds/{{camp.id}}/reviews"
-			class="{{#if user}}validation-form{{/if}} mb-4" novalidate>
-			<div class="mt-1">
-				<label for="rating" class="form-label">Rating</label>
-				<input type="range" name="rating" class="form-range" id="rating"
-					min="1" max="5" step="1">
+			class="{{#if user}}validation-form{{/if}} mb-4" novalidate
+			id="{{#if user}}rating-form{{/if}}">
+
+			<fieldset class="starability-basic">
+				<input type="radio" id="no-rate" class="input-no-rate"
+					name="rating" value="0" checked aria-label="No rating." />
+				<input type="radio" id="first-rate1" name="rating" value="1" />
+				<label for="first-rate1" title="Terrible"></label>
+				<input type="radio" id="first-rate2" name="rating" value="2" />
+				<label for="first-rate2" title="Not good"></label>
+				<input type="radio" id="first-rate3" name="rating" value="3" />
+				<label for="first-rate3" title="Average"></label>
+				<input type="radio" id="first-rate4" name="rating" value="4" />
+				<label for="first-rate4" title="Very good"></label>
+				<input type="radio" id="first-rate5" name="rating" value="5" />
+				<label for="first-rate5" title="Amazing"></label>
+			</fieldset>
+
+			<div class="invalid-feedback mt-2">
+				This field is required!
 			</div>
-			<div class="mt-1">
+
+			<div class="mt-4">
 				<label for="body" class="form-label">Review</label>
 				<textarea class="form-control" name="body" id="body" rows="3"
 					required></textarea>

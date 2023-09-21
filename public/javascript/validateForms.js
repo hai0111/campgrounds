@@ -20,4 +20,27 @@
 			false
 		)
 	})
+
+	const ratingForm = document.getElementById('rating-form')
+	if (ratingForm) {
+		const invalidFeedback = ratingForm.querySelector('.invalid-feedback')
+		ratingForm.addEventListener('submit', (e) => {
+			const ratingValue = Array.from(e.target).find(
+				(input) => input.name === 'rating' && input.checked
+			).value
+
+			if (ratingValue === '0') {
+				e.preventDefault()
+				invalidFeedback.classList.add('d-block')
+			} else {
+				invalidFeedback.classList.remove('d-block')
+			}
+		})
+
+		ratingForm.querySelectorAll('[name="rating"]').forEach((item) => {
+			item.addEventListener('change', (e) => {
+				invalidFeedback.classList.remove('d-block')
+			})
+		})
+	}
 })()
