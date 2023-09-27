@@ -11,6 +11,7 @@ module.exports.saveReturnTo = (path) => (req, res, next) => {
 module.exports.authenticate = (req, res, next) => {
 	if (!req.isAuthenticated() && req.path !== '/login') {
 		req.session.returnTo = req.session.returnTo || req.originalUrl
+		req.session.body = req.body
 
 		req.flash('toast', {
 			type: 'danger',

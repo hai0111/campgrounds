@@ -1,8 +1,9 @@
 <div class='row'>
 	<h1 class='text-center'>Form Add Campground</h1>
 	<div class='col-6 offset-3'>
+		{{!-- class='validation-form' --}}
 		<form action='/campgrounds' method='post' novalidate
-			class='validation-form'>
+			enctype="multipart/form-data">
 			<div class='mb-3'>
 				<label for='title' class='form-label'> Title</label>
 				<input class='form-control' type='text' name='title' id='title'
@@ -19,6 +20,11 @@
 				<div class="valid-feedback">
 					Looks good!
 				</div>
+			</div>
+			<div class='mb-3'>
+
+				<label for='file' class='form-label'> Upload image</label>
+				<input type="file" name="file" id="file">
 			</div>
 
 			<div class='mb-3'>

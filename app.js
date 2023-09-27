@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config()
+}
+
 const express = require('express')
 const path = require('path')
 const app = express()
@@ -101,6 +105,7 @@ app.use('*', (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
+	console.log(err)
 	const { code = 500, message = 'Something went wrong', stack, errToast } = err
 	if (errToast)
 		req.flash('toast', {

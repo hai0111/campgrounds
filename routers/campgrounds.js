@@ -11,13 +11,22 @@ const {
 	isAuthorCampground,
 	validateCampground,
 } = require('../middleware')
+const parser = require('../cloudinary')
 
 const campgroundRouter = express.Router()
 
 campgroundRouter
 	.route('/')
 	.get(catchAsync(campground.index))
-	.post(authenticate, validateCampground, catchAsync(campground.create))
+	.post(
+		authenticate,
+		parser.single('file'),
+		(req, res) => {
+			return res.json(req.file)
+		},
+		validateCampground,
+		catchAsync(campground.create)
+	)
 
 campgroundRouter.get('/new', authenticate, catchAsync(campground.renderNewForm))
 
