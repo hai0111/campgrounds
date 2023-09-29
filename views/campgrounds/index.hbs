@@ -5,31 +5,32 @@
 {{greet}}
 
 {{#each camps}}
-	<div class='card my-2 overflow'>
-		<div class='row'>
-			<div class='col-md-4'>
-				<img width='100%' alt='{{location}}' src='{{image}}' />
-			</div>
-			<div class='col-md-8'>
-				<div class='card-body'>
-					<h5 class='card-title'>{{title}}</h5>
-					<p class='card-text'>{{description}}</p>
-					<p class='card-text'>
-						<small class='text-muted'>
-							{{location}}
-						</small>
-					</p>
-					<a href='/campgrounds/{{id}}' class='btn btn-primary'>
-						View
-						{{title}}
-					</a>
-					<a href='/campgrounds/{{id}}/update' class='btn btn-outline-primary'>
-						Update
-					</a>
-				</div>
+<div class='card my-2 overflow'>
+	<div class='row'>
+		<div class='col-md-4'>
+			<img width='100%' alt='{{location}}' src='{{thumnail}}' />
+		</div>
+		<div class='col-md-8'>
+			<div class='card-body'>
+				<h5 class='card-title'>{{title}}</h5>
+				<p class='card-text'>{{description}}</p>
+				<p class='card-text'>
+					<small class='text-muted'>
+						{{location}}
+					</small>
+				</p>
+				<a href='/campgrounds/{{id}}' class='btn btn-primary'>
+					View
+					{{title}}
+				</a>
+				<a href='/campgrounds/{{id}}/update'
+					class='btn btn-outline-primary'>
+					Update
+				</a>
 			</div>
 		</div>
 	</div>
+</div>
 {{/each}}
 
 <form action='/campgrounds/reset' method='post'>

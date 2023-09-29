@@ -20,10 +20,7 @@ campgroundRouter
 	.get(catchAsync(campground.index))
 	.post(
 		authenticate,
-		parser.single('file'),
-		(req, res) => {
-			return res.json(req.file)
-		},
+		parser.array('images'),
 		validateCampground,
 		catchAsync(campground.create)
 	)

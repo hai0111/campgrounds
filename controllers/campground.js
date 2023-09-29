@@ -5,6 +5,10 @@ const seedDB = require('../seeds')
 
 module.exports.index = async (req, res) => {
 	const camps = await Campground.find({})
+	camps.forEach((item) => {
+		item.thumnail = item.images[0]?.url
+	})
+
 	res.render('campgrounds', {
 		camps,
 		title: 'All campgrounds',
@@ -71,6 +75,7 @@ module.exports.delete = async (req, res) => {
 module.exports.create = async (req, res) => {
 	const { body } = req
 	const c = new CampGround({ ...body, author: req.user._id })
+	c.images = req.files.map((f) => ({ url: f.path, filename: f.originalname }))
 	await c.save()
 	req.flash('message', {
 		type: 'success',
