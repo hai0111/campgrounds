@@ -53,7 +53,24 @@ module.exports.renderUpdateForm = async (req, res) => {
 module.exports.update = async (req, res) => {
 	const { id } = req.params
 
-	await CampGround.findByIdAndUpdate(id, req.body).then((camp) => camp.save())
+	const images = req.files.map((f) => ({
+		url: f.path,
+		filename: f.originalname,
+	}))
+
+	const camp = await CampGround.findById(id)
+
+	for (const key in req.body) {
+		camp[key] = req.body[key]
+	}
+
+	camp.images.push(...images)
+	console.log({
+		camp,
+		'req.body': req.body,
+	})
+
+	await camp.save()
 
 	req.flash('message', {
 		type: 'success',

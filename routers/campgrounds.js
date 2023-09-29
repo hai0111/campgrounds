@@ -35,6 +35,7 @@ campgroundRouter
 	.put(
 		authenticate,
 		isAuthorCampground,
+		parser.array('images'),
 		validateCampground,
 		catchAsync(campground.update)
 	)

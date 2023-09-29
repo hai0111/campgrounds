@@ -2,7 +2,7 @@
 	<h1 class='text-center'>{{title}}</h1>
 	<div class='col-6 offset-3'>
 		<form action='/campgrounds/{{camp.id}}?_method=PUT' method='post'
-			class="validation-form" novalidate>
+			class="validation-form" novalidate enctype="multipart/form-data">
 			<div class='mb-3'>
 				<label for='title' class='form-label'> Title</label>
 				<input class='form-control' type='text' name='title' id='title'
@@ -19,17 +19,17 @@
 				<div class="valid-feedback">
 					Looks good!
 				</div>
-
 			</div>
 
-			<div class='mb-3'>
-				<label for='image' class='form-label'> Image URL</label>
-				<input class='form-control' type='text' name='image' id='image'
-					value='{{camp.image}}' required />
+			<div class="mb-3">
+				<label for='images' class='form-label'> Upload image</label>
+				<input type="file" class="form-control" for='images'
+					name="images" id="images" required multiple>
 				<div class="valid-feedback">
 					Looks good!
 				</div>
 			</div>
+
 
 			<div class='mb-3'>
 				<label for='price' class='form-label'> Price</label>
