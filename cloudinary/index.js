@@ -24,3 +24,4 @@ const storage = new CloudinaryStorage({
 const parser = multer({ storage })
 
 module.exports = parser
+module.exports.cloudinary = cloudinary

@@ -3,16 +3,20 @@ const Review = require('./review')
 
 const Schema = mongoose.Schema
 
+const ImageSchema = new Schema({
+	url: String,
+	filename: String,
+})
+
+ImageSchema.virtual('thumnail').get(function () {
+	return this.url.replace('upload/', 'upload/c_fill,w_300/')
+})
+
 const CampGroundSchema = new Schema({
 	title: { type: String, required: true },
 	price: { type: Number, required: true },
 	location: { type: String, required: true },
-	images: [
-		{
-			url: String,
-			filename: String,
-		},
-	],
+	images: [ImageSchema],
 	description: { type: String, required: true },
 	reviews: [
 		{

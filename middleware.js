@@ -33,6 +33,12 @@ module.exports.validateUser = (req, res, next) => {
 	} else next()
 }
 
+module.exports.setFieldArray = (field) => {
+	return (req, res, next) => {
+		req.body[field] = req.body[field] || []
+		next()
+	}
+}
 module.exports.validateCampground = (req, res, next) => {
 	const { body } = req
 	const resultValidate = camgroundSchema.validate(body, { abortEarly: false })

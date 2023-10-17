@@ -2,6 +2,7 @@ const Campground = require('../models/campground')
 const ExpressError = require('../utils/ExpressError')
 const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
+const { cloudinary } = require('../cloudinary')
 
 module.exports.index = async (req, res) => {
 	const camps = await Campground.find({})
@@ -39,6 +40,7 @@ module.exports.detail = async (req, res) => {
 	if (!camp) throw new ExpressError(404, 'Campground not found')
 
 	res.locals.isAuthor = req.user && camp.author?.id === req.user?.id
+
 	res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
 }
 module.exports.renderUpdateForm = async (req, res) => {
@@ -50,25 +52,37 @@ module.exports.renderUpdateForm = async (req, res) => {
 		nav: true,
 	})
 }
+
 module.exports.update = async (req, res) => {
 	const { id } = req.params
+	const { deleteImages, ...body } = req.body
 
-	const images = req.files.map((f) => ({
-		url: f.path,
-		filename: f.originalname,
-	}))
+	const images =
+		req.files?.map((f) => ({
+			url: f.path,
+			filename: f.originalname,
+		})) || []
 
 	const camp = await CampGround.findById(id)
 
-	for (const key in req.body) {
-		camp[key] = req.body[key]
+	for (const key in body) {
+		camp[key] = body[key]
 	}
 
-	camp.images.push(...images)
-	console.log({
-		camp,
-		'req.body': req.body,
+	camp.images = camp.images.filter(({ id, filename }) => {
+		if (deleteImages?.includes(id)) {
+			console.log(`yelp_camp/${filename.replace(/\.\w+$/, '')}`)
+			cloudinary.uploader
+				.destroy(`yelp_camp/${filename.replace(/\.\w+$/, '')}`)
+				.then((result) => {
+					console.log(result)
+				})
+			return false
+		}
+		return true
 	})
+
+	camp.images.push(...images)
 
 	await camp.save()
 

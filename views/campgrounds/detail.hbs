@@ -8,7 +8,7 @@
 					{{#each camp.images}}
 					<div
 						class="carousel-item {{#unless @index}}active{{/unless}}">
-						<img src="{{url}}" class="d-block w-100"
+						<img src="{{thumnail}}" class="d-block w-100"
 							alt="{{filename}}">
 					</div>
 					{{/each}}
@@ -49,7 +49,6 @@
 					<a href='/campgrounds' class='btn btn-info'>
 						Back to Campgrounds
 					</a>
-					{{#if isAuthor}}
 					<a href='/campgrounds/{{camp.id}}/update'
 						class='btn btn-primary'>
 						Update
@@ -58,7 +57,6 @@
 					<button class='btn btn-danger'>
 						Delete
 					</button>
-					{{/if}}
 				</form>
 			</div>
 

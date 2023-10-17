@@ -3,7 +3,7 @@
 	<div class='col-6 offset-3'>
 		<form action='/campgrounds/{{camp.id}}?_method=PUT' method='post'
 			class="validation-form" novalidate enctype="multipart/form-data">
-			<div class='mb-3'>
+			<div class='mb-2'>
 				<label for='title' class='form-label'> Title</label>
 				<input class='form-control' type='text' name='title' id='title'
 					value='{{camp.title}}' required />
@@ -12,7 +12,7 @@
 				</div>
 			</div>
 
-			<div class='mb-3'>
+			<div class='mb-2'>
 				<label for='location' class='form-label'> Location</label>
 				<input class='form-control' type='text' name='location'
 					id='location' value='{{camp.location}}' required />
@@ -21,17 +21,7 @@
 				</div>
 			</div>
 
-			<div class="mb-3">
-				<label for='images' class='form-label'> Upload image</label>
-				<input type="file" class="form-control" for='images'
-					name="images" id="images" required multiple>
-				<div class="valid-feedback">
-					Looks good!
-				</div>
-			</div>
-
-
-			<div class='mb-3'>
+			<div class='mb-2'>
 				<label for='price' class='form-label'> Price</label>
 				<div class='input-group'>
 					<span class='input-group-text'>$</span>
@@ -45,7 +35,7 @@
 				</div>
 			</div>
 
-			<div class='mb-3'>
+			<div class='mb-2'>
 				<label for='description' class='form-label'>Example
 					textarea</label>
 				<textarea class='form-control' name='description'
@@ -57,7 +47,29 @@
 
 			</div>
 
-			<div class='d-flex justify-content-end'>
+
+			<div class="mb-2">
+				<label for='images' class='form-label'> Upload image</label>
+				<input type="file" class="form-control" for='images'
+					name="images" id="images" multiple>
+				<div class="valid-feedback">
+					Looks good!
+				</div>
+			</div>
+
+
+			{{#each camp.images }}
+			<div class="mb-2">
+				<input type="checkbox" name="deleteImages[]"
+					id="del_img_{{@index}}" value="{{id}}">
+				<label for="del_img_{{@index}}">Delete</label>
+				<img class="w-100" src="{{url}}" alt="{{filename}}">
+			</div>
+			{{/each}}
+
+
+
+			<div class='d-flex justify-content-end mt-4'>
 				<a href='/campgrounds/{{camp.id}}' class='btn btn-info'>
 					Back to details
 				</a>
