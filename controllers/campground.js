@@ -42,7 +42,12 @@ module.exports.detail = async (req, res) => {
 
 	res.locals.isAuthor = req.user && camp.author?.id === req.user?.id
 
-	res.render('campgrounds/detail', { camp, title: camp?.title, nav: true })
+	res.render('campgrounds/detail', {
+		camp,
+		title: camp?.title,
+		nav: true,
+		MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
+	})
 }
 module.exports.renderUpdateForm = async (req, res) => {
 	const { id } = req.params

@@ -53,6 +53,12 @@ app.use(
 	express.static(path.join(__dirname, '/node_modules/bootstrap/dist/'))
 )
 
+// Mapbox
+app.use(
+	'/mapbox-gl',
+	express.static(path.join(__dirname, '/node_modules/mapbox-gl/dist/'))
+)
+
 const WEEK_TO_MINISECONDS = 1000 * 60 * 60 * 24 * 7
 const sessionOptions = {
 	secret: 'thisshouldbeabettersceret!',
