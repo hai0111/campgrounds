@@ -34,20 +34,20 @@ campgroundRouter
 	.route('/:id')
 	.get(catchAsync(campground.detail))
 	.put(
-		// authenticate,
-		// isAuthorCampground,
+		authenticate,
+		isAuthorCampground,
 		parser.array('images'),
 		validateCampground,
 		catchAsync(campground.update)
 	)
-	.delete(/* authenticate, isAuthorCampground, */ catchAsync(campground.delete))
+	.delete(authenticate, isAuthorCampground, catchAsync(campground.delete))
 
 campgroundRouter.use('/:id/reviews', reviewRouter)
 
 campgroundRouter.get(
 	'/:id/update',
-	// authenticate,
-	// isAuthorCampground,
+	authenticate,
+	isAuthorCampground,
 	catchAsync(campground.renderUpdateForm)
 )
 

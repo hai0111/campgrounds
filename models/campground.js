@@ -16,6 +16,10 @@ const CampGroundSchema = new Schema({
 	title: { type: String, required: true },
 	price: { type: Number, required: true },
 	location: {
+		type: String,
+		required: true,
+	},
+	geometry: {
 		type: {
 			type: String,
 			enum: ['Point'],

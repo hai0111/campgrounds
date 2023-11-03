@@ -4,6 +4,7 @@ const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
 const { cloudinary } = require('../cloudinary')
 const mapbox = require('../mapbox')
+const { getGeocode } = require('../utils')
 
 module.exports.index = async (req, res) => {
 	const camps = await Campground.find({})
@@ -63,6 +64,8 @@ module.exports.update = async (req, res) => {
 	const { id } = req.params
 	const { deleteImages, ...body } = req.body
 
+	const geometry = await getGeocode(body.location)
+
 	const images =
 		req.files?.map((f) => ({
 			url: f.path,
@@ -75,14 +78,13 @@ module.exports.update = async (req, res) => {
 		camp[key] = body[key]
 	}
 
+	camp.geometry = geometry
+
 	camp.images = camp.images.filter(({ id, filename }) => {
 		if (deleteImages?.includes(id)) {
-			console.log(`yelp_camp/${filename.replace(/\.\w+$/, '')}`)
 			cloudinary.uploader
 				.destroy(`yelp_camp/${filename.replace(/\.\w+$/, '')}`)
-				.then((result) => {
-					console.log(result)
-				})
+				.then()
 			return false
 		}
 		return true
@@ -110,17 +112,10 @@ module.exports.delete = async (req, res) => {
 	res.redirect('/campgrounds')
 }
 module.exports.create = async (req, res) => {
-	const geocodeResponse = await mapbox
-		.forwardGeocode({
-			query: req.body.location,
-			limit: 1,
-		})
-		.send()
-
-	const { geometry: location } = geocodeResponse.body.features[0]
+	const geometry = await getGeocode(req.body.location)
 
 	const { body } = req
-	const c = new CampGround({ ...body, location, author: req.user._id })
+	const c = new CampGround({ ...body, geometry, author: req.user._id })
 	c.images = req.files.map((f) => ({ url: f.path, filename: f.originalname }))
 	await c.save()
 	req.flash('message', {

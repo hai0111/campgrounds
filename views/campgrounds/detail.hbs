@@ -1,13 +1,11 @@
 <link rel="stylesheet" href="/mapbox-gl/mapbox-gl.css">
 
-<div id="map" style="height: 600px;"></div>
+<div id="map" class="mb-3" style="height: 300px;"></div>
+
 
 <div class='row'>
 	<div class='col-6'>
 		<div class='card'>
-
-
-
 			<div id="carouselExampleControls" class="carousel slide"
 				data-bs-ride="carousel">
 				<div class="carousel-inner">
@@ -55,6 +53,7 @@
 					<a href='/campgrounds' class='btn btn-info'>
 						Back to Campgrounds
 					</a>
+					{{#if isAuthor}}
 					<a href='/campgrounds/{{camp.id}}/update'
 						class='btn btn-primary'>
 						Update
@@ -63,6 +62,7 @@
 					<button class='btn btn-danger'>
 						Delete
 					</button>
+					{{/if}}
 				</form>
 			</div>
 
@@ -143,5 +143,7 @@
 
 <script>
 	const MAPBOX_TOKEN = '{{ MAPBOX_TOKEN }}'
+	let geometry = '{{camp.geometry.coordinates}}'
+	geometry = geometry.split(',').map(str => Number(str))
 </script>
 <script type="module" src="/javascript/mapbox-view.js"></script>
