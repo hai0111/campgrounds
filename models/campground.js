@@ -15,7 +15,17 @@ ImageSchema.virtual('thumnail').get(function () {
 const CampGroundSchema = new Schema({
 	title: { type: String, required: true },
 	price: { type: Number, required: true },
-	location: { type: String, required: true },
+	location: {
+		type: {
+			type: String,
+			enum: ['Point'],
+			required: true,
+		},
+		coordinates: {
+			type: [Number],
+			required: true,
+		},
+	},
 	images: [ImageSchema],
 	description: { type: String, required: true },
 	reviews: [

@@ -3,6 +3,7 @@ const ExpressError = require('../utils/ExpressError')
 const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
 const { cloudinary } = require('../cloudinary')
+const mapbox = require('../mapbox')
 
 module.exports.index = async (req, res) => {
 	const camps = await Campground.find({})
@@ -104,15 +105,23 @@ module.exports.delete = async (req, res) => {
 	res.redirect('/campgrounds')
 }
 module.exports.create = async (req, res) => {
+	const geocodeResponse = await mapbox
+		.forwardGeocode({
+			query: req.body.location,
+			limit: 1,
+		})
+		.send()
+
+	const { geometry: location } = geocodeResponse.body.features[0]
+
 	const { body } = req
-	const c = new CampGround({ ...body, author: req.user._id })
+	const c = new CampGround({ ...body, location, author: req.user._id })
 	c.images = req.files.map((f) => ({ url: f.path, filename: f.originalname }))
 	await c.save()
 	req.flash('message', {
 		type: 'success',
 		text: 'Create completed successfully',
 	})
-
 	res.redirect(`/campgrounds/${c._id}`)
 }
 
