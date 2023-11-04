@@ -3,7 +3,6 @@ const ExpressError = require('../utils/ExpressError')
 const CampGround = require('../models/campground')
 const seedDB = require('../seeds')
 const { cloudinary } = require('../cloudinary')
-const mapbox = require('../mapbox')
 const { getGeocode } = require('../utils')
 
 module.exports.index = async (req, res) => {
@@ -16,6 +15,7 @@ module.exports.index = async (req, res) => {
 		camps,
 		title: 'All campgrounds',
 		nav: true,
+		camps_json: JSON.stringify(camps),
 	})
 }
 
