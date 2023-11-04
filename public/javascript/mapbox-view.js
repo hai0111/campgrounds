@@ -1,5 +1,4 @@
 import '/mapbox-gl/mapbox-gl.js'
-console.log(geometry)
 
 mapboxgl.accessToken = MAPBOX_TOKEN
 
@@ -11,4 +10,14 @@ const map = new mapboxgl.Map({
 	zoom: 12, // starting zoom,
 })
 
-new mapboxgl.Marker({ color: 'blue' }).setLngLat(geometry).addTo(map)
+const popup = new mapboxgl.Popup({ maxWidth: 500, closeOnMove: true }).setHTML(
+	`
+<h6>${title}</h6>
+<p>${description}</p> 
+`
+)
+
+new mapboxgl.Marker({ color: 'blue' })
+	.setLngLat(geometry)
+	.setPopup(popup)
+	.addTo(map)

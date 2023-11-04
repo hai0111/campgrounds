@@ -2,7 +2,6 @@
 
 <div id="map" class="mb-3" style="height: 300px;"></div>
 
-
 <div class='row'>
 	<div class='col-6'>
 		<div class='card'>
@@ -145,5 +144,7 @@
 	const MAPBOX_TOKEN = '{{ MAPBOX_TOKEN }}'
 	let geometry = '{{camp.geometry.coordinates}}'
 	geometry = geometry.split(',').map(str => Number(str))
+	const title = '{{camp.title}}'
+	const description = '{{camp.description}}'
 </script>
 <script type="module" src="/javascript/mapbox-view.js"></script>
