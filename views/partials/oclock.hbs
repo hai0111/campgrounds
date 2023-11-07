@@ -1,0 +1,60 @@
+<link href="https://unpkg.com/@pqina/flip/dist/flip.min.css" rel="stylesheet">
+<script src="https://unpkg.com/@pqina/flip/dist/flip.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<style>
+    .tick {
+        font-size: 4rem;
+    }
+</style>
+
+<div class="d-flex justify-content-center" style="margin-top: 5rem;" id="test">
+    <div class="tick tick-hour" data-value="" data-did-init="setupFlip">
+        <div data-repeat="true" aria-hidden="true">
+            <span data-view="flip"></span>
+        </div>
+
+        <div style="font-size: 1.3rem;" class="text-center mt-2">Hours</div>
+    </div>
+
+    <div class="tick tick-minute mx-5" data-value="" data-did-init="setupFlip">
+        <div data-repeat="true" aria-hidden="true">
+            <span data-view="flip"></span>
+        </div>
+
+        <div style="font-size: 1.3rem;" class="text-center mt-2">Minutes</div>
+    </div>
+
+    <div class="tick tick-second" data-value="" data-did-init="setupFlip">
+        <div data-repeat="true" aria-hidden="true">
+            <span data-view="flip"></span>
+        </div>
+
+        <div style="font-size: 1.3rem;" class="text-center mt-2">Seconds</div>
+    </div>
+</div>
+
+
+
+
+<script type="module">
+    Tick.helper.interval(function () {
+        const momo = moment()
+        document.querySelector('.tick-hour').dataset.value = momo.format('HH')
+        document.querySelector('.tick-minute').dataset.value = momo.format('mm')
+        document.querySelector('.tick-second').dataset.value = momo.format('ss')
+    }, 1000);
+
+    const callback = () => {
+        const tonTai = document.querySelectorAll('.tick-credits')
+        if (tonTai.length) {
+            observer.disconnect()
+            tonTai.forEach(item => item.remove())
+        }
+    }
+    const observer = new MutationObserver(callback);
+    const ocu = document.getElementById('test')
+    const config = { attributes: true, childList: true, subtree: true };
+    observer.observe(ocu, config)
+</script>

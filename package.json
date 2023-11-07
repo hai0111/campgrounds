@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.15.3",
+    "@pqina/flip": "^1.8.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "cloudinary": "^1.41.0",

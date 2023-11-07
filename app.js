@@ -111,7 +111,6 @@ app.use('*', (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-	console.log(req.path)
 	const { code = 500, message = 'Something went wrong', stack, errToast } = err
 	if (errToast)
 		req.flash('toast', {
