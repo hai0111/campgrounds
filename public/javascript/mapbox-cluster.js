@@ -1,17 +1,12 @@
 import '/mapbox-gl/mapbox-gl.js'
-let camps = JSON.parse(document.querySelector('data').dataset.camps)
-
-camps = camps.map((c) => {
-	const { geometry, ...properties } = c
-	return { geometry, properties }
-})
+const camps = JSON.parse(document.querySelector('data').dataset.camps)
 
 mapboxgl.accessToken =
 	'pk.eyJ1IjoibnZoYWkiLCJhIjoiY2xua2hkdmNnMTRjejJrbWpxemN3dDR0NSJ9.1xw26a3_78WmCD5oiym55w'
 const map = new mapboxgl.Map({
 	container: 'map',
 	// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-	style: 'mapbox://styles/mapbox/light-v11',
+	style: 'mapbox://styles/mapbox/satellite-streets-v12',
 	center: [-103.5917, 40.6699],
 	zoom: 3,
 })
@@ -104,8 +99,8 @@ map.on('load', () => {
 	// description HTML from its properties.
 	map.on('click', 'unclustered-point', (e) => {
 		const coordinates = e.features[0].geometry.coordinates.slice()
-		const title = e.features[0].properties.title
-		const description = e.features[0].properties.description
+
+		const markupPopup = e.features[0].properties.markupPopup
 
 		// Ensure that if the map is zoomed out such that
 		// multiple copies of the feature are visible, the
@@ -114,10 +109,7 @@ map.on('load', () => {
 			coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
 		}
 
-		new mapboxgl.Popup()
-			.setLngLat(coordinates)
-			.setHTML(`<h6>${title}</h6>${description}`)
-			.addTo(map)
+		new mapboxgl.Popup().setLngLat(coordinates).setHTML(markupPopup).addTo(map)
 	})
 
 	map.on('mouseenter', 'clusters', () => {

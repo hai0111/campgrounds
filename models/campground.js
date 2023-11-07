@@ -12,36 +12,45 @@ ImageSchema.virtual('thumnail').get(function () {
 	return this.url.replace('upload/', 'upload/c_fill,w_300/')
 })
 
-const CampGroundSchema = new Schema({
-	title: { type: String, required: true },
-	price: { type: Number, required: true },
-	location: {
-		type: String,
-		required: true,
-	},
-	geometry: {
-		type: {
+const opts = { toJSON: { virtuals: true } }
+
+const CampGroundSchema = new Schema(
+	{
+		title: { type: String, required: true },
+		price: { type: Number, required: true },
+		location: {
 			type: String,
-			enum: ['Point'],
 			required: true,
 		},
-		coordinates: {
-			type: [Number],
-			required: true,
+		geometry: {
+			type: {
+				type: String,
+				enum: ['Point'],
+				required: true,
+			},
+			coordinates: {
+				type: [Number],
+				required: true,
+			},
 		},
-	},
-	images: [ImageSchema],
-	description: { type: String, required: true },
-	reviews: [
-		{
+		images: [ImageSchema],
+		description: { type: String, required: true },
+		reviews: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Review',
+			},
+		],
+		author: {
 			type: Schema.Types.ObjectId,
-			ref: 'Review',
+			ref: 'User',
 		},
-	],
-	author: {
-		type: Schema.Types.ObjectId,
-		ref: 'User',
 	},
+	opts
+)
+
+CampGroundSchema.virtual('properties.markupPopup').get(function () {
+	return `<a href="/campgrounds/${this._id}"><h6>${this.title}</h6></a>${this.description}`
 })
 
 CampGroundSchema.post('findOne', async (camp) => {
@@ -54,7 +63,7 @@ CampGroundSchema.post('findOneAndDelete', async (doc) => {
 			_id: {
 				$in: doc.reviews,
 			},
-		})
+		})``
 	}
 })
 
