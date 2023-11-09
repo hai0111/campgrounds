@@ -23,15 +23,25 @@
 
 	{{>notify}}
 
+
 	{{#if nav}}
 	{{>navbar}}
 	{{/if}}
+
+
+	{{#if customLayout}}
+
+	{{{body}}}
+
+	{{else}}
 
 	<main class='container mt-5'>
 		{{{body}}}
 	</main>
 
+
 	{{>footer}}
+	{{/if}}
 
 
 

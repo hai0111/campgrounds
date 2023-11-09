@@ -89,7 +89,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, '/public')))
 
 app.get('/', (req, res) => {
-	res.render('home')
+	res.render('home', { customLayout: true })
 })
 
 app.get('/fakeUser', async (req, res) => {

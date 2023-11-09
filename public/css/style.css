@@ -6,3 +6,23 @@
 	height: 500px;
 	object-fit: cover;
 }
+
+.home-container {
+	background-image: linear-gradient(rgb(0 0 0 / 60%), rgb(0 0 0 / 60%)),
+		url('/img/home-bg.jpg');
+	background-size: cover;
+}
+
+@media (min-width: 992px) {
+	#navbarNavAltMarkup .nav-link {
+		border-bottom-width: 3px;
+		border-bottom-style: solid;
+		border-bottom-color: transparent;
+		transition: all 0.2s ease;
+	}
+
+	#navbarNavAltMarkup .nav-link:hover {
+		display: inline-block;
+		border-bottom-color: #fff;
+	}
+}
