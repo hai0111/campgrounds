@@ -4,12 +4,25 @@ const camps = JSON.parse(document.querySelector('data').dataset.camps)
 mapboxgl.accessToken =
 	'pk.eyJ1IjoibnZoYWkiLCJhIjoiY2xua2hkdmNnMTRjejJrbWpxemN3dDR0NSJ9.1xw26a3_78WmCD5oiym55w'
 const map = new mapboxgl.Map({
-	container: 'map',
+	container: 'cluster-map',
 	// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
 	style: 'mapbox://styles/mapbox/light-v11',
 	center: [-103.5917, 40.6699],
 	zoom: 3,
 })
+
+map.addControl(new mapboxgl.NavigationControl())
+map.addControl(
+	new mapboxgl.GeolocateControl({
+		positionOptions: {
+			enableHighAccuracy: true,
+		},
+		// When active the map will receive updates to the device's location as it changes.
+		trackUserLocation: true,
+		// Draw an arrow next to the location dot to indicate which direction the device is heading.
+		showUserHeading: true,
+	})
+)
 
 map.on('load', () => {
 	// Add a new source from our GeoJSON data and

@@ -26,3 +26,11 @@
 		border-bottom-color: #fff;
 	}
 }
+
+#cluster-map {
+	height: 400px;
+}
+
+#map {
+	height: 300px;
+}
