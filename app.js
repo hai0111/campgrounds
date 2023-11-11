@@ -68,6 +68,10 @@ const sessionOptions = {
 		maxAge: WEEK_TO_MINISECONDS,
 	},
 }
+
+// Sanitize
+const mongoSanitize = require('express-mongo-sanitize')
+app.use(mongoSanitize())
 app.use(session(sessionOptions))
 app.use(flash())
 
