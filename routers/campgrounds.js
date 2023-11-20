@@ -3,6 +3,7 @@ const express = require('express')
 const catchAsync = require('../utils/catchAsync')
 
 const campground = require('../controllers/campground')
+const { body } = require('express-validator')
 
 // Utils
 const reviewRouter = require('./reviews')
@@ -22,6 +23,8 @@ campgroundRouter
 	.post(
 		authenticate,
 		parser.array('images'),
+		body('title').escape(),
+		body('description').escape(),
 		validateCampground,
 		catchAsync(campground.create)
 	)
@@ -37,6 +40,8 @@ campgroundRouter
 		authenticate,
 		isAuthorCampground,
 		parser.array('images'),
+		body('title').escape(),
+		body('description').escape(),
 		validateCampground,
 		catchAsync(campground.update)
 	)

@@ -1,6 +1,8 @@
 <div class="alert alert-danger" role="alert">
     <h4 class="alert-heading">Error code: {{code }}</h4>
     <p>{{message}}</p>
+    {{#if isDev }}
     <hr>
     <div>{{stack}}</div>
+    {{/if}}
 </div>

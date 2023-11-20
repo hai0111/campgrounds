@@ -84,6 +84,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use((req, res, next) => {
+	res.locals.isDev = process.env.NODE_ENV.trim() === 'development'
 	res.locals.returnTo = req.session.returnTo
 	res.locals.user = req.user
 	res.locals.toast = req.flash('toast')[0]
