@@ -10,6 +10,7 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const mongoose = require('mongoose')
 const passport = require('passport')
+const helmet = require('helmet')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
 
@@ -19,6 +20,24 @@ const { engine } = require('express-handlebars')
 
 const campgroundRouter = require('./routers/campgrounds')
 const authRouter = require('./routers/auth')
+
+// Security
+const connectSrcs = ['https://api.mapbox.com', 'https://events.mapbox.com']
+const scriptSrcs = ['cdn.jsdelivr.net', 'blob:']
+const imgSrcs = ['https:', 'data:']
+
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				defaultSrc: [],
+				connectSrc: ["'self'", ...connectSrcs],
+				scriptSrc: ["'self'", ...scriptSrcs],
+				imgSrc: ["'self'", ...imgSrcs],
+			},
+		},
+	})
+)
 
 mongoose
 	.connect('mongodb://localhost:27017/yelp-camp')
