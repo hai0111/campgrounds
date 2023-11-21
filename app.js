@@ -1,6 +1,8 @@
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config()
-}
+const dotenv = require('dotenv')
+
+const isDev = process.env.NODE_ENV.trim() === 'development'
+const pathEnv = isDev ? '.env.dev' : '.env.prd'
+dotenv.config({ path: pathEnv })
 
 const express = require('express')
 const path = require('path')
@@ -40,7 +42,11 @@ app.use(
 )
 
 mongoose
-	.connect('mongodb://localhost:27017/yelp-camp')
+	.connect(
+		isDev
+			? 'mongodb://localhost:27017/yelp-camp'
+			: process.env.MONGODB_CONNECT_URL
+	)
 	.then(() => {
 		console.log('Database connected!')
 	})
@@ -103,7 +109,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use((req, res, next) => {
-	res.locals.isDev = process.env.NODE_ENV.trim() === 'development'
+	res.locals.isDev = isDev
 	res.locals.returnTo = req.session.returnTo
 	res.locals.user = req.user
 	res.locals.toast = req.flash('toast')[0]
