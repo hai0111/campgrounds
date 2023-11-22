@@ -7,14 +7,14 @@ dotenv.config({ path: pathEnv })
 const express = require('express')
 const path = require('path')
 const app = express()
-const methodOverride = require('method-override')
-const session = require('express-session')
 const flash = require('connect-flash')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const helmet = require('helmet')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
+
+const methodOverride = require('method-override')
 
 const ExpressError = require('./utils/ExpressError')
 
@@ -42,11 +42,7 @@ app.use(
 )
 
 mongoose
-	.connect(
-		isDev
-			? 'mongodb://localhost:27017/yelp-camp'
-			: process.env.MONGODB_CONNECT_URL
-	)
+	.connect(process.env.MONGODB_CONNECT_URL)
 	.then(() => {
 		console.log('Database connected!')
 	})
@@ -84,11 +80,24 @@ app.use(
 	express.static(path.join(__dirname, '/node_modules/mapbox-gl/dist/'))
 )
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
+
+const store = MongoStore.create({
+	mongoUrl: process.env.MONGODB_CONNECT_URL,
+	touchAfter: 24 * 60 * 60,
+})
+
+store.on('error', (err) => {
+	console.log('MONGO SESSION STORE WAS WRONG', err)
+})
+
 const WEEK_TO_MINISECONDS = 1000 * 60 * 60 * 24 * 7
 const sessionOptions = {
+	store,
 	secret: 'thisshouldbeabettersceret!',
-	resave: false,
 	saveUninitialized: false,
+	resave: false,
 	cookie: {
 		maxAge: WEEK_TO_MINISECONDS,
 	},
