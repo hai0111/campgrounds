@@ -25,7 +25,7 @@ const seedDB = async () => {
 		const city = cities[random1000]
 		const location = `${city.city} , ${city.state}`
 		const c = new CampGround({
-			author: '6502b6ae9ea4439a17b3efd3',
+			author: null,
 			location,
 			geometry: {
 				type: 'Point',

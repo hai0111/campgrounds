@@ -53,7 +53,7 @@ module.exports.validateCampground = (req, res, next) => {
 module.exports.isAuthorCampground = async (req, res, next) => {
 	const { id } = req.params
 	const camp = await Campground.findById(id)
-	if (!camp.author.equals(req.user?.id)) {
+	if (!camp.author?.equals(req.user?.id)) {
 		return res.redirect(`/campgrounds/${id}`)
 	}
 	next()
@@ -62,7 +62,7 @@ module.exports.isAuthorCampground = async (req, res, next) => {
 module.exports.isAuthorReview = async (req, res, next) => {
 	const { reviewId, id } = req.params
 	const rv = await Review.findById(reviewId)
-	if (!rv.author.equals(req.user?.id)) {
+	if (!rv.author?.equals(req.user?.id)) {
 		return res.redirect(`/campgrounds/${id}`)
 	}
 	next()
